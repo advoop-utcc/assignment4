@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+  <body>
+    <div class="container-fluid">
+      <h2>Current Weather</h2> 
+      <p>Please enter your postcode:</p>
+      <form action="/action_page.php">
+      <div class="row">
+        <div class="col-sm-4">
+          <input type="text" class="form-control" id="postcode">
+        </div>
+        <div class="col-sm-1">
+          <button type="button" class="btn btn-default" id="btn" onClick="getWeather()">Query</button>
+        </div>
+      </div>
+      </form>
+      <br><br>            
+      <table class="table table-striped table-bordered" id="wTable">
+        <tbody id="tBody">
+        </tbody>
+      </table>
+	</div>
+  <script>
+  function getWeather(){
+    $(document).ready(function(){
+        var pcode = $("#postcode").val();
+        $("#tBody").html("");
+        $.get("http://api.openweathermap.org/data/2.5/weather?zip="+pcode+",TH&units=metric&appid=51edc33fafe6e66cd79d7255cf8779e6",function(data,status){
+          //console.log("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+          var emp = data.employees;
+          htmlText = "";
+          htmlText += "<tr>";
+          htmlText += "<td class='col-xs-3'><b>Area Name</b></td>";
+          htmlText += "<td class='col-xs-3'>"+data.name+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td class='col-xs-3'><b>Current Temperature (C')</b></td>";
+          htmlText += "<td class='col-xs-3'>"+data.main.temp+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td class='col-xs-3'><b>Minimum Temperature (C')</b></td>";
+          htmlText += "<td class='col-xs-3'>"+data.main.temp_min+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td class='col-xs-3'><b>Maximum Temperature (C')</b></td>";
+          htmlText += "<td class='col-xs-3'>"+data.main.temp_max+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td><b>Air Pressure (hPa)</b></td>";
+          htmlText += "<td>"+data.main.pressure+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td><b>Humidity (%)</b></td>";
+          htmlText += "<td>"+data.main.humidity+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td><b>Wind Speed (km/h)</b></td>";
+          htmlText += "<td>"+data.wind.speed+"</td>";
+          htmlText += "</tr>";
+          htmlText += "<tr>";
+          htmlText += "<td><b>Weather Description</b></td>";
+          htmlText += "<td>"+data.weather[0].description+"</td>";
+          htmlText += "</tr>";
+    
+          $("#tBody").html(htmlText);
+        });
+    });
+  }
+    
+  </script>
+  </body>
+</html>
